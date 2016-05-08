@@ -10,6 +10,26 @@ let rec quick_sort = function
 	       prefix @ (hd :: suffix)
 
 (* Merge sort *)
+let rec merge xs ys = match xs, ys with
+  | [], []       -> []
+  | x::xs', []    -> x::xs'
+  | [], y::ys'    -> y::ys'
+  | x::xs', y::ys' -> if x < y then x :: (merge xs' (y::ys'))
+		      else y :: (merge (x::xs') ys')
+
+let split xs =
+  let rec aux (l, r) = function
+    | []       -> (l, r)
+    | x::[]    -> (x::l, r)
+    | x::y::xs -> aux (x::l, y::r) xs
+  in aux ([], []) xs
+
+let rec mergesort xs = let left, right = split xs in
+		       match left, right with
+		       | [], [] -> []
+		       | x::xs, [] -> (x::xs)
+		       | [], y::ys -> (y::ys)
+		       | x::xs, y::ys -> merge (mergesort (x::xs)) (mergesort (y::ys))
 
 (* Bubble sort *)
 
